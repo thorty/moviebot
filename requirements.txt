@@ -1,0 +1,4 @@
+requests
+langchain
+openai
+streamlit
