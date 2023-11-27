@@ -38,10 +38,10 @@ recro_prompt = PromptTemplate.from_template("""
     your answer always makes me want to see the movies.
                                             
     Please make sure you complete the objective above with the following rules:
-    1. always answer in german language     
-    2. Write a List for every movie recommendation based on the context in the following format:
-
-    <movietitle>: \n <one sentence that descriptes to movie the best!>. ( Free Streaming on: <flatproviders>, For Rent: <rentproviders>   < Behind the descriptions write the flatproviders and rentproviders from context.
+    1. always answer in german language, use only movies that are included in the context!     
+    2. Write a List for every movie recommendation from the context in the following format:                                            
+        <movietitle>: \n\n <only one short sentence that descriptes to movie the best!>. ( Frei verfügbar auf: <flatproviders>, zum Mieten: <rentproviders> )      
+                                                                                
     context: {context}
 """)
 

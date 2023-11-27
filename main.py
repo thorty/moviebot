@@ -3,10 +3,7 @@ from llm_helpers.moviebot import get_chain
 import utils.utils as utils
 
 ### definitions
-modelchain = get_chain()
-
-
-
+STREAMING_PROVIDER = ["Disney Plus","Amazon Prome Video","Apple TV","MagentaTV", "Netflix"] 
 
 ### content and porcessing
 
@@ -20,6 +17,11 @@ with col1:
 with col2:
     st.image(image='mobo.jpg', width=350 )
 
+
+
+providerselection = st.multiselect(
+    'Streaminganbieter',STREAMING_PROVIDER)
+st.session_state['providerselection'] = providerselection
 
 
 #prompt = "Hi, Was möchtest du für einen Film sehen?"
@@ -40,7 +42,7 @@ if prompt := st.chat_input("Was möchtest du sehen?"):
     st.chat_message("user").markdown(prompt)    
     # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": prompt})
-    
+   
     with st.spinner('Ok. Einen Moment. Bin gleich weieder da!  '):
         lang = utils.detect_ipnut_lang(prompt)
         #make the llm stuff    
@@ -50,7 +52,8 @@ if prompt := st.chat_input("Was möchtest du sehen?"):
         titlehistory = st.session_state.titlehistory        
         print(f"titlehistory: ",titlehistory)
         
-        response = modelchain.invoke({"input":prompt+" aber keinen der folgenden titel: "+titlehistory, "lang":lang})
+        modelchain = get_chain()
+        response = modelchain.invoke({"input":prompt+" aber keinen der folgenden titel: "+titlehistory, "config": st.session_state['providerselection'], "lang":lang, "provider": providerselection})
 
         newtitles = utils.getTitlesFromOutput(response)
         st.session_state.titlehistory = st.session_state.titlehistory + newtitles

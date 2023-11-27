@@ -20,6 +20,7 @@ Output Movie Recommendation and info howto stream.
 - [ ] filter for providers and pref to rent / flatrate
 - [ ] filter this by user input
 - [ ] use block/watch list / streaming source and so on
+- [ ] Use mood as input and find the movie. 
 ( - [ ] inputfield for api key)
 
 ### Todos
@@ -74,3 +75,6 @@ https://docs.streamlit.io/knowledge-base/tutorials/build-conversational-apps#int
 ## secure the app
 
 https://blog.streamlit.io/streamlit-authenticator-part-1-adding-an-authentication-component-to-your-app/
+
+# Learnings  streamlit Session just in main class not other importet files maybe because langchaun uses LambdaRunnable Sandbox for running the code: Solution use classes that can be intantiatet or divide the chain
+- 

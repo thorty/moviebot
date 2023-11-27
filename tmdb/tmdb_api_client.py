@@ -5,12 +5,38 @@ import json
 from difflib import get_close_matches
 import os
 
+# If you're curious of all the loggers
+#print(streamlit.logger._loggers)  
+
+#streamlit_root_logger = logging.getLogger(streamlit.__name__)
 
 
 headers = {
     "accept": "application/json",
     "Authorization": os.environ["tmdb_bearer"]    
 }
+
+
+
+def get_movies_with_recro(titles: list[str], providers: list[str]):
+  print(f"get_basic_data_from_tmdb_for_titles",titles)
+  movies =[]
+  # get movies from tmdb from given titles
+  for title in titles:
+    movie = get_basic_data_from_tmdb_for_title(title)
+    if movie:
+      movies.append(movie)
+  # add similar recommendations from tmdb
+  similar_movies = get_recro_movies(movies)
+  if similar_movies:
+    movies = movies + similar_movies
+  # filter for providers
+  rsult_movies = filter_movies(movies, providers)
+  if rsult_movies and len(rsult_movies) > 5:
+    rsult_movies = rsult_movies[:4]    
+  fulldata_as_string = create_data_list(rsult_movies)
+  return fulldata_as_string
+  
 
 def get_basic_data_from_tmdb_for_titles(titles: list[str]):
   print(f"get_basic_data_from_tmdb_for_titles",titles)
@@ -48,6 +74,38 @@ def get_detail_data_from_tmdb_for_title(title: str):
   except:
      return None
 
+def get_recro_movies(movies):  
+  if len(movies) > 0:
+    searchId = movies[0]["id"]
+    results = find_smilar_movies(searchId)
+    if results:
+      movies = parse_movies_from_search(results)
+    return movies
+
+def find_smilar_movies(id):
+  url = "https://api.themoviedb.org/3/movie/"+str(id)+"/recommendations?language=en-US&page=1"
+  response = requests.get(url, headers=headers)  
+  if response.status_code == 200:
+    data = json.loads(response.text)  
+    return data
+  return None  
+
+def parse_movies_from_search(results):
+  movies=[]
+  for movie in results["results"]:
+    if movie and "id" in movie:
+      id = get_movie_id(movie)
+      providers = get_watch_providers(id)
+      flatproviders = get_watch_providers_via_subtype(filter_watch_providers(providers, "DE"),"flatrate" )
+      rentproviders = get_watch_providers_via_subtype(filter_watch_providers(providers, "DE"),"rent" )
+      #buyproviders = get_watch_providers_via_subtype(filter_watch_providers(providers, "DE"),"buy" )
+
+      filtered_data = {'title': movie['title'], 'flatproviders': flatproviders, 'rentproviders': rentproviders, 'overview': movie['overview'],
+                      'release_date': movie['release_date'], 'id': id,
+                      }
+      movies.append(filtered_data)
+  return movies
+
 def find_movie_basic(title, lang):
 
   title = title.replace(' ', '+')
@@ -57,10 +115,10 @@ def find_movie_basic(title, lang):
 
   if response.status_code == 200:
     data = json.loads(response.text)
-    print(f"find_movie for", title, "response: ",data)
+    #print(f"find_movie for", title, "response: ",data)
 
     if "results" in str(data) and len(data["results"]) > 0:
-      print(f"movie found!")
+      #print(f"movie found!")
       movie = get_movie_form_search(data["results"], title)
       return movie
 
@@ -88,7 +146,7 @@ def find_movie(title, lang):
 
 
 def get_movie_id(movie):
-  print(f"get_movie_id for ", movie)
+  #print(f"get_movie_id for ", movie)
   if movie:
       return movie["id"]
 
@@ -155,7 +213,7 @@ def create_basic_movie_data(title):
     buyproviders = get_watch_providers_via_subtype(filter_watch_providers(providers, "DE"),"buy" )
 
     filtered_data = {'title': movie['title'], 'flatproviders': flatproviders, 'rentproviders': rentproviders, 'overview': movie['overview'],
-                     'release_date': movie['release_date'],
+                     'release_date': movie['release_date'], 'id': id,
                      }
     return filtered_data
 
@@ -201,5 +259,21 @@ def create_data_list(fulldata):
      formatted_info += f"rentproviders: {', '.join(movie_info['rentproviders'])}\n"
      movieinfoasstring+=formatted_info
   return movieinfoasstring
+
+def filter_movies(movies: dict, providers: list[str]):  
+  filtered_list = [d for d in movies if ('flatproviders' in d and any(val in d['flatproviders'] for val in providers)) or ('rentproviders' in d and any(val in d['rentproviders'] for val in providers))]
+    
+  for movie in filtered_list:
+    flatproviders=[]
+    rentproviders=[]
+    for provider in providers:
+      if provider in movie["flatproviders"]:
+        flatproviders.append(provider)
+      if provider in movie["rentproviders"]:
+        rentproviders.append(provider)  
+    movie["rentproviders"]=rentproviders
+    movie["flatproviders"]=flatproviders
+
+  return filtered_list
 
 
