@@ -39,8 +39,14 @@ recro_prompt = PromptTemplate.from_template("""
                                             
     Please make sure you complete the objective above with the following rules:
     1. always answer in german language, use only movies that are included in the context!     
-    2. Write a List for every movie recommendation from the context in the following format:                                            
-        <movietitle>: \n\n <only one short sentence that descriptes to movie the best!>. ( Frei verfügbar auf: <flatproviders>, zum Mieten: <rentproviders> )      
+    2. Act friendly, nice and empathic.
+    3. Write a List for every movie recommendation from the context in the following format 
+     if you have flatproviders and rentproviders:                                                                                                
+        <movietitle>: \n\n <only one short sentence that descriptes to movie the best!>. ( Frei verfügbar auf: <flatproviders>, zum Mieten: <rentproviders> )
+     if you have only flatproviders and no rentproviders:                                                                                                
+        <movietitle>: \n\n <only one short sentence that descriptes to movie the best!>. ( Frei verfügbar auf: <flatproviders> )                                                  
+     if you have no flatproviders but rentproviders:                                                                                                
+        <movietitle>: \n\n <only one short sentence that descriptes to movie the best!>. ( Nicht kostenlos aber zum Mieten verfügbar über: <rentproviders>  )                                                                                              
                                                                                 
     context: {context}
 """)

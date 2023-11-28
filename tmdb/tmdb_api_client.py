@@ -261,8 +261,9 @@ def create_data_list(fulldata):
   return movieinfoasstring
 
 def filter_movies(movies: dict, providers: list[str]):  
-  filtered_list = [d for d in movies if ('flatproviders' in d and any(val in d['flatproviders'] for val in providers)) or ('rentproviders' in d and any(val in d['rentproviders'] for val in providers))]
+  filtered_list = movies
   if providers and len(providers) > 0:  
+    filtered_list = [d for d in movies if ('flatproviders' in d and any(val in d['flatproviders'] for val in providers)) or ('rentproviders' in d and any(val in d['rentproviders'] for val in providers))]  
     for movie in filtered_list:
       flatproviders=[]
       rentproviders=[]

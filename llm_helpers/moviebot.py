@@ -24,6 +24,21 @@ def get_chain():
         openai_api_key=openai_api_key,
         max_tokens=1000
     )
+
+    llm_gpt4_temp = ChatOpenAI(
+        model="gpt-4",
+        openai_api_key=openai_api_key,
+        max_tokens=1000,
+        temperature=0.3,
+    )
+    
+
+    llm_gpt4 = ChatOpenAI(
+        model="gpt-4",
+        openai_api_key=openai_api_key,
+        max_tokens=1000,        
+    )
+    
     
     openai_functioncall_to_get_the_titles = create_functioncall_chain_for_titles(openai_api_key)
 
@@ -45,9 +60,9 @@ def get_chain():
 
     recommendation_chain = (
        
-        {"context": {"titles": recommedation_titels_prompt | llm | StrOutputParser() | {"input": RunnablePassthrough()} | openai_functioncall_to_get_the_titles , "config":RunnablePassthrough() }| RunnableLambda(get_recro_movies), "input":RunnablePassthrough(), "lang":RunnablePassthrough()}
+        {"context": {"titles": recommedation_titels_prompt | llm_gpt4_temp | StrOutputParser() | {"input": RunnablePassthrough()} | openai_functioncall_to_get_the_titles , "config":RunnablePassthrough() }| RunnableLambda(get_recro_movies), "input":RunnablePassthrough(), "lang":RunnablePassthrough()}
         | recro_prompt
-        | llm
+        | llm_gpt4
         | StrOutputParser()
     )
 
