@@ -39,7 +39,7 @@ recro_prompt = PromptTemplate.from_template("""
                                             
     Please make sure you complete the objective above with the following rules:
     1. always answer in german language, use only movies that are included in the context!     
-    2. Act friendly, nice and empathic.
+    2. Act friendly, nice and empathic. start with an empathetic intro and end with best wishes while watching.
     3. Write a List for every movie recommendation from the context in the following format 
      if you have flatproviders and rentproviders:                                                                                                
         <movietitle>: \n\n <only one short sentence that descriptes to movie the best!>. ( Frei verfügbar auf: <flatproviders>, zum Mieten: <rentproviders> )
