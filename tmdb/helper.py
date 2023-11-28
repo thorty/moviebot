@@ -18,11 +18,13 @@ def get_movie_data(input: dict):
 
 def get_recro_movies(input: dict):
   try:
-    titles = input["titles"]
+    #titles = input["titles"]
+    titles = list(input["titles"]["text"].values())
+    inputlist = titles
     provider = input["config"]["provider"]
     print(f"_get_movie_data titles input: ", titles)
-    inputlist = titles.split(",")
-    inputlist = [x.strip(' ') for x in inputlist]      
+    #inputlist = titles.split(",")
+    #inputlist = [x.strip(' ') for x in inputlist]
     result = get_movies_with_recro(inputlist, provider)
     print(f"get_recro_movies result: ",result)
     return result  

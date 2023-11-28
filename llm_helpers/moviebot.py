@@ -1,9 +1,12 @@
+import os
+
 from langchain.chat_models import ChatOpenAI
 from langchain.schema.output_parser import StrOutputParser
 from langchain.schema.runnable import RunnableLambda
 from langchain.schema.runnable import RunnablePassthrough
 from langchain.schema.runnable import RunnableBranch
-import os
+from langchain.prompts import PromptTemplate
+from langchain.chains import create_extraction_chain
 
 from llm_helpers.openai_prompts import descisionprompt, recommedation_titels_prompt, general_prompt, recro_prompt, question_answering_prompt, extract_title_prompt
 from tmdb.helper import get_recro_movies, get_detail_moviedata
@@ -21,6 +24,11 @@ def get_chain():
         openai_api_key=openai_api_key,
         max_tokens=1000
     )
+    
+    openai_functioncall_to_get_the_titles = create_functioncall_chain_for_titles(openai_api_key)
+
+
+
     #define chains
     descissionchain = ( descisionprompt | llm | StrOutputParser() )
     #recommendation_chain = (recommedation_titels_prompt | llm )
@@ -37,7 +45,7 @@ def get_chain():
 
     recommendation_chain = (
        
-        {"context": {"titles": recommedation_titels_prompt | llm | StrOutputParser(), "config":RunnablePassthrough() }| RunnableLambda(get_recro_movies), "input":RunnablePassthrough(), "lang":RunnablePassthrough()}
+        {"context": {"titles": recommedation_titels_prompt | llm | StrOutputParser() | {"input": RunnablePassthrough()} | openai_functioncall_to_get_the_titles , "config":RunnablePassthrough() }| RunnableLambda(get_recro_movies), "input":RunnablePassthrough(), "lang":RunnablePassthrough()}
         | recro_prompt
         | llm
         | StrOutputParser()
@@ -64,3 +72,30 @@ def get_chain():
 
     return full_chain
 
+
+
+
+def create_functioncall_chain_for_titles(openai_api_key):
+
+  template = """
+    You have to extract the movie titles form given input and return them as a Python List of strings
+
+    input: {input}
+    output:
+    """
+
+  prompt_template = PromptTemplate(input_variables=["input"], template=template)
+
+  # Schema
+  schema = {
+      "properties": {
+          "movie_title_{i}": {"type": "string"},
+      },
+      "required": ["movie_title"],
+  }
+
+  #create chain
+  llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo-0613",  openai_api_key=openai_api_key)
+  chain = create_extraction_chain(schema=schema, llm=llm, verbose=True, prompt=prompt_template)
+  #chain = create_extraction_chain(schema=schema, llm=llm, verbose=True )
+  return chain

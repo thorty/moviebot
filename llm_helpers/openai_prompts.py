@@ -17,7 +17,7 @@ Classification:"""
 
 recommedation_titels_prompt = PromptTemplate.from_template(
         """ You are a assistent for movie recommendations. Your goal is to recommend movies based on the users input. Everytime recommend 5 movies.
-            Return a commar seperated list of the english movie titles.
+            Write a commar-seperated list of 5 movie titles.
 
 input: {input}
 Answer:"""
@@ -59,3 +59,4 @@ extract_title_prompt = PromptTemplate.from_template("""
     You are an expert for movies. Extract the movie title from the user input: {input}
     Always respond just the title, nothing else!
 """)
+
