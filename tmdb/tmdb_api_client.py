@@ -20,7 +20,7 @@ headers = {
 
 
 def get_movies_with_recro(titles: list[str], providers: list[str]):
-  print(f"get_basic_data_from_tmdb_for_titles",titles)
+  #print(f"get_basic_data_from_tmdb_for_titles",titles)
   movies =[]
   # get movies from tmdb from given titles
   for title in titles:
@@ -51,7 +51,7 @@ def get_basic_data_from_tmdb_for_titles(titles: list[str]):
 
 
 def get_detail_data_from_tmdb_for_titles(titles: list[str]):
-  print(f"get_detail_data_from_tmdb_for_titles",titles)
+  #print(f"get_detail_data_from_tmdb_for_titles",titles)
   movies =[]
   for title in titles:
     movie = get_detail_data_from_tmdb_for_title(title)
@@ -61,7 +61,7 @@ def get_detail_data_from_tmdb_for_titles(titles: list[str]):
 
 def get_basic_data_from_tmdb_for_title(title: str):
   try:
-    print(f"get_movie_data_from_tmdb","title=",title)
+    #print(f"get_movie_data_from_tmdb","title=",title)
     fulldata = create_basic_movie_data(title)
     return fulldata
   except:
@@ -69,7 +69,7 @@ def get_basic_data_from_tmdb_for_title(title: str):
 
 def get_detail_data_from_tmdb_for_title(title: str):
   try:
-    print(f"get_movie_data_from_tmdb","title=",title)
+    #print(f"get_movie_data_from_tmdb","title=",title)
     fulldata = create_movie_data(title)
     return fulldata
   except:
@@ -134,10 +134,10 @@ def find_movie(title, lang):
 
   if response.status_code == 200:
     data = json.loads(response.text)
-    print(f"find_movie for", title, "response: ",data)
+    #print(f"find_movie for", title, "response: ",data)
 
     if "results" in str(data) and len(data["results"]) > 0:
-      print(f"movie found!")
+      #print(f"movie found!")
       movie = get_movie_form_search(data["results"], title)
       movie = get_detail_moviedata(get_movie_id(movie))
       movie = json.loads(movie)
