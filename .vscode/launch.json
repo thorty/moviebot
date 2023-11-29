@@ -13,6 +13,14 @@
             "justMyCode": true
         },
         {
+            "name": "Python: export duckdb",
+            "type": "python",
+            "request": "launch",
+            "program": "playground/export_duckdb.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },        
+        {
             "name": "Python: Streamlit",
             "type": "python",
             "request": "launch",

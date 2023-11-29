@@ -24,7 +24,4 @@ def insert_conversation( usermessage, botmessage):
 def fetchdata():
     query= "SELECT * FROM messages;"
     with duckdb.connect(db, read_only=True) as con:
-        return con.execute(query).df()    
-
-
-
+        return con.execute(query).df()            
