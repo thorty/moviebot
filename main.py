@@ -5,7 +5,7 @@ import utils.duckdb as duckdb
 
 
 ### definitions
-STREAMING_PROVIDER = ["Disney Plus","Amazon Prome Video","Apple TV","MagentaTV", "Netflix"] 
+STREAMING_PROVIDER = ["Disney Plus","Amazon Prime Video","Apple TV","MagentaTV", "Netflix"] 
 
 # db
 duckdb.creattable()
