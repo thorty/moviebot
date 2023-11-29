@@ -11,9 +11,14 @@ def creattable():
 
 
 def insert_conversation( usermessage, botmessage):
-    query= "INSERT INTO messages VALUES ('"+usermessage+"','"+botmessage+"');"
-    with duckdb.connect(db, read_only=False) as con:    
-        return con.execute(query).df()
+    try:
+        usermessage = usermessage.replace("'","")
+        botmessage = botmessage.replace("'","")
+        query= "INSERT INTO messages VALUES ('"+usermessage+"','"+botmessage+"');"
+        with duckdb.connect(db, read_only=False) as con:    
+            return con.execute(query).df()
+    except:
+        return None
 
 
 def fetchdata():
