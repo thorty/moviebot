@@ -1,7 +1,17 @@
 # Movie Bot prototyp
 
 Should help find movies in a conversational way.
-Output Movie Recommendation and info howto stream.
+Output Movie Recommendation how to stream and answers questions about movies.
+
+Currently useage of
+
+OpenAI https://openai.com/
+TMDB https://www.themoviedb.org/?language=de
+
+examples:
+
+![emaple 1](examples/example1.png)
+![emaple 2](examples/example2.png)
 
 ## Steps
 
@@ -11,15 +21,15 @@ Output Movie Recommendation and info howto stream.
 - [X]  write recommendation to chat output with context form 3
 
 ### Bonus Tasks
-- [ ] find newer once via tmdb api and recommendet titles
+- [X] find newer once via tmdb api and recommendet titles
 - [X] if user asks further questions answer based on api call
-- [ ] if user asks for new recros do this! - do not recro same movies in one session
+- [X] if user asks for new recros do this! - do not recro same movies in one session
 - [X] build website with chat interface
 - [ ] build website with images and direct links
 - [ ] test with other cheaper llms
-- [ ] filter for providers and pref to rent / flatrate
-- [ ] filter this by user input
-- [ ] use block/watch list / streaming source and so on
+- [X] filter for providers
+- [X] filter for other preferences like rent or free streaming
+- [ ] use block/watch list
 - [ ] Use mood as input and find the movie. 
 ( - [ ] inputfield for api key)
 
@@ -28,7 +38,7 @@ Output Movie Recommendation and info howto stream.
 - [X] script jupyter norebook for proof of concept
 - [X] use env variables for api keys 
 - [X] build streamit site
-- [ ] Use function calling for getting movie titles
+- [X] Use function calling for getting movie titles
 - [ ] Multilingual
 
 
@@ -45,36 +55,3 @@ openai_api_key
 </br> </br> </br> </br> </br> 
 
 
-
-
-# Links
-
-## tmdb ressources
-
-#### Details
-https://developer.themoviedb.org/reference/movie-details
-
-#### Credits
-https://developer.themoviedb.org/reference/movie-credits
-
-### similar movies (for later use on algorithm side)
-https://api.themoviedb.org/3/movie/{movie_id}/similar
-
-
-# Idea
-
-stick everything together with
-https://python.langchain.com/docs/expression_language/how_to/routing
-
-
-## streamlit
-
-## general
-https://docs.streamlit.io/knowledge-base/tutorials/build-conversational-apps#introduction
-
-## secure the app
-
-https://blog.streamlit.io/streamlit-authenticator-part-1-adding-an-authentication-component-to-your-app/
-
-# Learnings  streamlit Session just in main class not other importet files maybe because langchaun uses LambdaRunnable Sandbox for running the code: Solution use classes that can be intantiatet or divide the chain
-- 
