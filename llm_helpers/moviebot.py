@@ -1,5 +1,3 @@
-import os
-
 from langchain.chat_models import ChatOpenAI
 from langchain.schema.output_parser import StrOutputParser
 from langchain.schema.runnable import RunnableLambda
@@ -10,14 +8,14 @@ from langchain.chains import create_extraction_chain
 
 from llm_helpers.openai_prompts import descisionprompt, recommedation_titels_prompt, general_prompt, recro_prompt, question_answering_prompt, extract_title_prompt
 from tmdb.helper import get_recro_movies, get_detail_moviedata
-
+import st
 
 def get_chain():
 
     config="test"
 
     # Setup keys
-    openai_api_key = os.environ['openai_api_key']
+    openai_api_key = st.secrets['openai_api_key']
 
     llm = ChatOpenAI(
         model="gpt-3.5-turbo",

@@ -3,7 +3,7 @@
 import requests
 import json
 from difflib import get_close_matches
-import os
+import st
 
 # If you're curious of all the loggers
 #print(streamlit.logger._loggers)  
@@ -13,7 +13,7 @@ import os
 
 headers = {
     "accept": "application/json",
-    "Authorization": os.environ["tmdb_bearer"]    
+    "Authorization": st.secrets["tmdb_bearer"]    
 }
 
 
