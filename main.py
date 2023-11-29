@@ -1,9 +1,14 @@
 import streamlit as st
 from llm_helpers.moviebot import get_chain
 import utils.utils as utils
+import utils.duckdb as duckdb
+
 
 ### definitions
 STREAMING_PROVIDER = ["Disney Plus","Amazon Prome Video","Apple TV","MagentaTV", "Netflix"] 
+
+# db
+duckdb.creattable()
 
 ### content and porcessing
 
@@ -58,6 +63,7 @@ if prompt := st.chat_input("Was möchtest du sehen?"):
         newtitles = utils.getTitlesFromOutput(response)
         st.session_state.titlehistory = st.session_state.titlehistory + newtitles
 
+        duckdb.insert_conversation(prompt, response)
 
     #response = f"Echo: {prompt}"
     # Display assistant response in chat message container
