@@ -3,7 +3,8 @@
 import requests
 import json
 from difflib import get_close_matches
-import st
+
+import streamlit as st
 
 # If you're curious of all the loggers
 #print(streamlit.logger._loggers)  
