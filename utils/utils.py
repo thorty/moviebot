@@ -34,3 +34,5 @@ def getTitlesFromOutput(text: str):
        titles += ", " +match
 
     return titles
+
+

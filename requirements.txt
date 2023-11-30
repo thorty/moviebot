@@ -4,3 +4,4 @@ openai
 streamlit>=1.28
 langdetect
 duckdb
+streamlit-authenticator
