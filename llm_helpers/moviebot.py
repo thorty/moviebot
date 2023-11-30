@@ -45,7 +45,7 @@ def get_chain():
 
 
     #define chains
-    descissionchain = ( descisionprompt | llm | StrOutputParser() )
+    descissionchain = ( descisionprompt | llm_gpt4 | StrOutputParser() )
     #recommendation_chain = (recommedation_titels_prompt | llm )
 
 #{"titles":StrOutputParser(), "config":config }|
@@ -68,7 +68,7 @@ def get_chain():
 
 
     info_chain = (
-        {"context": extract_title_prompt | llm |StrOutputParser() | RunnableLambda(get_detail_moviedata), "input":RunnablePassthrough()}
+        {"context": extract_title_prompt | llm | StrOutputParser() | RunnableLambda(get_detail_moviedata), "input":RunnablePassthrough()}
         | question_answering_prompt
         | llm
         | StrOutputParser())

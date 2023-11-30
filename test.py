@@ -9,7 +9,9 @@ def main():
         
     #resp = duckdb.creattable()
     #resp= duckdb.insert_conversation("user1","bot1")
-    resp=duckdb.fetchdata()
+    resp = helper.get_detail_moviedata("Planet der Affen - Prevolution")
+
+    #resp=duckdb.fetchdata()
     print(resp)
 if __name__ == "__main__":
     main()
