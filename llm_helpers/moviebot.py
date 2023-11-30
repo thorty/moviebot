@@ -83,7 +83,7 @@ def get_chain():
         (lambda x: "question" in x["topic"].lower(), info_chain),
         general_chain,
     )
-    full_chain = {"topic": descissionchain, "input": lambda x: x["input"], "lang":lambda x: x["lang"], "provider":lambda x: x["provider"]} | branch
+    full_chain = {"topic": descissionchain, "input": lambda x: x["input"], "provider":lambda x: x["provider"], "blacklist":lambda x: x["blacklist"]} | branch
 
     return full_chain
 

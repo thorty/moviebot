@@ -60,7 +60,7 @@ if prompt := st.chat_input("Was möchtest du sehen?"):
     st.session_state.messages.append({"role": "user", "content": prompt})
 
     with st.spinner('Ok. Einen Moment. Bin gleich weieder da!  '):
-        lang = utils.detect_ipnut_lang(prompt)
+        #lang = utils.detect_ipnut_lang(prompt) does not work
         #make the llm stuff    
         if 'titlehistory' not in st.session_state:
             print(f"initialize titelhistory for session")
@@ -69,7 +69,7 @@ if prompt := st.chat_input("Was möchtest du sehen?"):
         print(f"titlehistory: ",titlehistory)
         
         modelchain = get_chain()
-        response = modelchain.invoke({"input":prompt+" aber keinen der folgenden titel: "+titlehistory, "config": st.session_state['providerselection'], "lang":lang, "provider": providerselection})
+        response = modelchain.invoke({"input":prompt, "provider": providerselection, "blacklist": titlehistory})
         newtitles = utils.getTitlesFromOutput(response)
         st.session_state.titlehistory = st.session_state.titlehistory + newtitles
         duckdb.insert_conversation(prompt, response)

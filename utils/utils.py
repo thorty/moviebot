@@ -33,6 +33,16 @@ def getTitlesFromOutput(text: str):
     for match in matches:
        titles += ", " +match
 
+    if len(titles.split("("))>1:
+        titles=""
+        pattern = r'\d+\.\s([^:]+)'
+        matches = re.findall(pattern, text)
+
+        for match in matches:
+            titles += ", " +match
+
     return titles
+
+
 
 

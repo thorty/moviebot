@@ -22,10 +22,11 @@ def get_recro_movies(input: dict):
     titles = list(input["titles"]["text"].values())
     inputlist = titles
     provider = input["config"]["provider"]
+    blacklist = input["config"]["blacklist"]
     print(f"_get_movie_data titles input: ", titles)
     #inputlist = titles.split(",")
     #inputlist = [x.strip(' ') for x in inputlist]
-    result = get_movies_with_recro(inputlist, provider)
+    result = get_movies_with_recro(inputlist, provider, blacklist)
     print(f"get_recro_movies result: ",result)
     return result  
   except:

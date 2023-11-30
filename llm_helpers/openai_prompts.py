@@ -19,7 +19,7 @@ recommedation_titels_prompt = PromptTemplate.from_template(
         """ You are a assistent for movie recommendations. Your goal is to recommend movies based on the users input. Everytime recommend 5 movies.
             Write a commar-seperated list of 5 movie titles.
 
-input: {input}
+input: {input} aber keine der folgenden titel {blacklist}
 Answer:"""
 )
 

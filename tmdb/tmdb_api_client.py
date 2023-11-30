@@ -19,7 +19,7 @@ headers = {
 
 
 
-def get_movies_with_recro(titles: list[str], providers: list[str]):
+def get_movies_with_recro(titles: list[str], providers: list[str], blacklist: str):
   #print(f"get_basic_data_from_tmdb_for_titles",titles)
   movies =[]
   # get movies from tmdb from given titles
@@ -32,7 +32,7 @@ def get_movies_with_recro(titles: list[str], providers: list[str]):
   if similar_movies:
     movies = movies + similar_movies
   # filter for providers
-  rsult_movies = filter_movies(movies, providers)
+  rsult_movies = filter_movies(movies, providers, blacklist)
   if rsult_movies and len(rsult_movies) > 5:
     rsult_movies = rsult_movies[:4]    
   fulldata_as_string = create_data_list(rsult_movies)
@@ -261,7 +261,7 @@ def create_data_list(fulldata):
      movieinfoasstring+=formatted_info
   return movieinfoasstring
 
-def filter_movies(movies: dict, providers: list[str]):  
+def filter_movies(movies: dict, providers: list[str], blacklist):  
   filtered_list = movies
   if providers and len(providers) > 0:  
     filtered_list = [d for d in movies if ('flatproviders' in d and any(val in d['flatproviders'] for val in providers)) or ('rentproviders' in d and any(val in d['rentproviders'] for val in providers))]  
@@ -275,7 +275,9 @@ def filter_movies(movies: dict, providers: list[str]):
           rentproviders.append(provider)  
       movie["rentproviders"]=rentproviders
       movie["flatproviders"]=flatproviders
-    
+  
+  filtered_list = [m for m in filtered_list if m["title"] not in blacklist]
+
   return filtered_list
 
 
