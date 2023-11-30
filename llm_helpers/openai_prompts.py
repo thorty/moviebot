@@ -3,7 +3,7 @@ from langchain.prompts import PromptTemplate
 
 descisionprompt = PromptTemplate.from_template(
         """ You are a assistent for everyything about movies.
-        Given the user input below, classify it as either being for a Movie 'Recommendation' request, or is it a 'question' about a specific movie.
+        Given the user input below, classify it as either being for a Movie 'Recommendation' request, or is it a 'question' about one movie?
 
 Do not respond with more than one word.
 
