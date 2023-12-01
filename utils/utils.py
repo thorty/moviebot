@@ -25,22 +25,22 @@ def detect_ipnut_lang(input: str):
     return lang
 
 def getTitlesFromOutput(text: str):
-
     titles =""
-    pattern = re.compile(r'^(.*?):\s', re.MULTILINE)
-    matches = re.findall(pattern, text)
-
-    for match in matches:
-       titles += ", " +match
-
-    if len(titles.split("("))>1:
-        titles=""
-        pattern = r'\n\d+\.\s([^:]+)'
+    try:        
+        pattern = re.compile(r'^(.*?):\s', re.MULTILINE)
         matches = re.findall(pattern, text)
 
         for match in matches:
             titles += ", " +match
 
+        if len(titles.split("("))>1:        
+            titles=""
+            pattern = r'\d+\.\s([^:]+)'
+            matches = re.findall(pattern, text)
+            for match in matches:
+                titles += ", " +match
+    except:
+        pass
     return titles
 
 
