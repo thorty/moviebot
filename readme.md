@@ -43,14 +43,18 @@ examples:
 
 
 ## Streamlit app
-
+Run with `python -m streamlit run main.py`
 ### Env Variables
 
 need to set the following variables
 
-tmndb_bearer
+tmdb_bearer
 openai_api_key
 
+## Use with local ollama
+curl https://ollama.ai/install.sh | sh
+& ollama serve
+ollama run llama2
 
 </br> </br> </br> </br> </br> 
 

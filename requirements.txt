@@ -2,3 +2,5 @@ requests
 langchain
 openai
 streamlit
+dotenv
+langdetect
