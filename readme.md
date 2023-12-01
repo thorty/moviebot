@@ -17,8 +17,8 @@ examples:
 
 - [X] Get Movie Recommendations via LLM and userinput
 - [X]  Use LLM function call to get the titles 
-- [X]  search movies via TMDB Api and find streaming provider **AND AALL OTHER MOVIE_INFO DATA (PLAYTIME; ACTORS; GENRES)**
-- [X]  write recommendation to chat output with context form 3
+- [X]  search movies via TMDB Api and find streaming provider
+- [X]  write recommendation to chat output with context from tmdb api
 
 ### Bonus Tasks
 - [X] find newer once via tmdb api and recommendet titles
@@ -28,10 +28,10 @@ examples:
 - [ ] build website with images and direct links
 - [ ] test with other cheaper llms
 - [X] filter for providers
-- [X] filter for other preferences like rent or free streaming
+- [ ] filter for other preferences like rent or free streaming
 - [ ] use block/watch list
 - [ ] Use mood as input and find the movie. 
-( - [ ] inputfield for api key)
+- [ ] inputfield for api key
 
 ### Todos
 
