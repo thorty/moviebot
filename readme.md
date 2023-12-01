@@ -12,6 +12,7 @@ examples:
 
 ![emaple 1](examples/example1.png)
 ![emaple 2](examples/example2.png)
+![emaple 3](examples/example3.png)
 
 ## Steps
 
