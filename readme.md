@@ -8,10 +8,12 @@ Currently useage of
 OpenAI https://openai.com/
 TMDB https://www.themoviedb.org/?language=de
 
-examples:
-
+## Examples:
+## Example 1
 ![emaple 1](examples/example1.png)
+## Examples 2 
 ![emaple 2](examples/example2.png)
+## Example 3
 ![emaple 3](examples/example3.png)
 
 ## Steps
