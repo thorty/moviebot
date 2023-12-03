@@ -1,6 +1,6 @@
-requests
-langchain
-openai
-streamlit
-dotenv
-langdetect
+requests; python_version >  < '3.11'
+langchain; python_version >  < '3.11'
+openai; python_version >  < '3.11'
+streamlit; python_version >  < '3.11'
+dotenv; python_version >  < '3.11'
+langdetect; python_version >  < '3.11'

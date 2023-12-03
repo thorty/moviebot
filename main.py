@@ -19,7 +19,7 @@ st.header("Hi! Ich bin Mobo!")
 col1, col2 = st.columns(2)
 with col1:
     st.markdown(
-        "Dein persönlicher Filmfinder \n\n Ich bin hier um den richtigen Film für dioch zu finden. \n\n Sag mir einfach was du sehen möchtest, \n ich werde versuchen etwas passendes dich zu finden!"
+        "Dein persönlicher Filmfinder \n\n Ich bin hier um den richtigen Film für dich zu finden. \n\n Sag mir einfach was du sehen möchtest, \n ich werde versuchen etwas passendes dich zu finden!"
     )
 
 with col2:
