@@ -10,6 +10,11 @@ import yaml
 from yaml import SafeLoader
 
 
+def reset():
+    st.session_state.messages=[]
+    st.session_state.chathistory = ""
+    st.session_state.titlehistory = ""
+        
 
 ### definitions
 STREAMING_PROVIDER = ["Disney Plus","Amazon Prime Video","Apple TV","MagentaTV", "Netflix"] 
@@ -68,10 +73,19 @@ if prompt := st.chat_input("Was möchtest du sehen?"):
         titlehistory = st.session_state.titlehistory                
         print(f"titlehistory: ",titlehistory)
         
+        if 'chathistory' not in st.session_state:
+            print(f"initialize chathistory for session")
+            st.session_state.chathistory = ""    
+        chathistory = st.session_state.chathistory                
+        print(f"chathistory: ",chathistory)
         
-        response = modelchain.invoke({"input":prompt, "provider": providerselection, "blacklist": titlehistory}, config={'callbacks': [ConsoleCallbackHandler()]})
+        response = modelchain.invoke({"input":prompt, "provider": providerselection, "blacklist": titlehistory, "history": chathistory}, config={'callbacks': [ConsoleCallbackHandler()]})
         newtitles = utils.getTitlesFromOutput(response)
         st.session_state.titlehistory = st.session_state.titlehistory + newtitles
+        
+        chathistory = prompt
+        st.session_state.chathistory = st.session_state.chathistory + chathistory
+
         duckdb.insert_conversation(prompt, response)
     #response = f"Echo: {prompt}"
     # Display assistant response in chat message container
@@ -79,3 +93,7 @@ if prompt := st.chat_input("Was möchtest du sehen?"):
         st.markdown(response)
     # Add assistant response to chat history
     st.session_state.messages.append({"role": "assistant", "content": response})
+
+
+st.button("Reset", type="primary", on_click=reset)
+    

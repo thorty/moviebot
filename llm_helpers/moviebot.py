@@ -19,11 +19,6 @@ import streamlit as st
 def get_chain():
 
 
-    memory = ConversationBufferMemory(return_messages=True, output_key="answer", input_key="question")
-
-    loaded_memory = RunnablePassthrough.assign(
-        history=RunnableLambda(memory.load_memory_variables) | itemgetter("history")
-    )
 
     config="test"
 
@@ -71,7 +66,7 @@ def get_chain():
 
     recommendation_chain = (
        
-        {"context": {"titles": recommedation_titels_prompt | llm_gpt4_temp | StrOutputParser() | {"input": RunnablePassthrough()} | openai_functioncall_to_get_the_titles , "config":RunnablePassthrough() }| RunnableLambda(get_recro_movies), "input":RunnablePassthrough(), "history":loaded_memory}
+        {"context": {"titles": recommedation_titels_prompt | llm_gpt4_temp | StrOutputParser() | {"input": RunnablePassthrough()} | openai_functioncall_to_get_the_titles , "config":RunnablePassthrough() }| RunnableLambda(get_recro_movies), "input":RunnablePassthrough(), "history":RunnablePassthrough()}
         | recro_prompt
         | llm_gpt4
         | StrOutputParser()
@@ -94,7 +89,7 @@ def get_chain():
         (lambda x: "question" in x["topic"].lower(), info_chain),
         general_chain,
     )
-    full_chain = {"topic": descissionchain, "input": lambda x: x["input"], "provider":lambda x: x["provider"], "blacklist":lambda x: x["blacklist"], "history":loaded_memory }| branch
+    full_chain = {"topic": descissionchain, "input": lambda x: x["input"], "provider":lambda x: x["provider"], "blacklist":lambda x: x["blacklist"], "history":lambda x: x["history"] }| branch
 
     return full_chain
 

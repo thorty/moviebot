@@ -16,12 +16,13 @@ Classification:"""
 
 
 recommedation_titels_prompt = PromptTemplate.from_template(
-        """ You are a assistent for movie recommendations. Your goal is to recommend movies based on the users input. Everytime recommend 5 movies.
-            Write a commar-seperated list of 5 movie titles. Improve your reccomendation based on the input from history.
+        """ ou are a assistent for movie recommendations. Your goal is to recommend movies based on the users input. 
+            Try to figgure out if the user wants a follow up recommendation based on the history or if its a new one. If its a new one recommennd only based on the input. 
+            If its a follow up make recommendations based on input and history.
+            Everytime recommend 5 movies.
+            Write a commar-seperated list of 5 movie titles. 
 
-input: {input} aber keine der folgenden titel {blacklist}
-
-History: {history}
+input: {input} und {history} aber keine der folgenden titel {blacklist}
 
 Answer:"""
 )
