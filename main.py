@@ -29,21 +29,21 @@ st.set_page_config(page_title="Moviebot", page_icon=":robot:")
 
 
 #content
-m = st.markdown("""
-<style>
-div.stDownloadButton > button:first-child {    
-    background: transparent;
-    border: none !important;
-    font-size:0;                
-}
-</style>""", unsafe_allow_html=True)
+#m = st.markdown("""
+#<style>
+#div.stDownloadButton > button:first-child {    
+#    background: transparent;
+#    border: none !important;
+#    font-size:0;                
+#}
+#</style>""", unsafe_allow_html=True)
 
 col1, col2 = st.columns(2)
 with col1:
     st.header("Ich bin Mobo!")
     st.markdown("Dein persönlicher Filmfinder \n\n Ich bin hier um den richtigen Film für dich zu finden. \n\n Sag mir einfach was du sehen möchtest, \n ich werde versuchen etwas passendes für dich zu finden!")
-    with open('duck.db', 'rb') as f:
-        st.download_button('', f, file_name='duck.db')
+#    with open('duck.db', 'rb') as f:
+#        st.download_button('', f, file_name='duck.db')
 with col2:        
     st.image(image='mobo.jpg', width=350 )
 providerselection = st.multiselect(
