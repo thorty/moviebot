@@ -1,3 +1,4 @@
+from operator import itemgetter
 from langchain.chat_models import ChatOpenAI
 from langchain.schema.output_parser import StrOutputParser
 from langchain.schema.runnable import RunnableLambda
@@ -5,14 +6,24 @@ from langchain.schema.runnable import RunnablePassthrough
 from langchain.schema.runnable import RunnableBranch
 from langchain.prompts import PromptTemplate
 from langchain.chains import create_extraction_chain
+from langchain.memory import ConversationBufferMemory
+from langchain.schema.runnable import RunnableMap, RunnablePassthrough, RunnableLambda
 
 from llm_helpers.openai_prompts import descisionprompt, recommedation_titels_prompt, general_prompt, recro_prompt, question_answering_prompt, extract_title_prompt
 from tmdb.helper import get_recro_movies, get_detail_moviedata
-
+    
 import streamlit as st
 
 
+
 def get_chain():
+
+
+    memory = ConversationBufferMemory(return_messages=True, output_key="answer", input_key="question")
+
+    loaded_memory = RunnablePassthrough.assign(
+        history=RunnableLambda(memory.load_memory_variables) | itemgetter("history")
+    )
 
     config="test"
 
@@ -60,7 +71,7 @@ def get_chain():
 
     recommendation_chain = (
        
-        {"context": {"titles": recommedation_titels_prompt | llm_gpt4_temp | StrOutputParser() | {"input": RunnablePassthrough()} | openai_functioncall_to_get_the_titles , "config":RunnablePassthrough() }| RunnableLambda(get_recro_movies), "input":RunnablePassthrough(), "lang":RunnablePassthrough()}
+        {"context": {"titles": recommedation_titels_prompt | llm_gpt4_temp | StrOutputParser() | {"input": RunnablePassthrough()} | openai_functioncall_to_get_the_titles , "config":RunnablePassthrough() }| RunnableLambda(get_recro_movies), "input":RunnablePassthrough(), "history":loaded_memory}
         | recro_prompt
         | llm_gpt4
         | StrOutputParser()
@@ -68,7 +79,7 @@ def get_chain():
 
 
     info_chain = (
-        {"context": extract_title_prompt | llm | StrOutputParser() | RunnableLambda(get_detail_moviedata), "input":RunnablePassthrough()}
+        {"context": extract_title_prompt | llm | StrOutputParser() | RunnableLambda(get_detail_moviedata), "input":RunnablePassthrough(), }
         | question_answering_prompt
         | llm
         | StrOutputParser())
@@ -83,7 +94,7 @@ def get_chain():
         (lambda x: "question" in x["topic"].lower(), info_chain),
         general_chain,
     )
-    full_chain = {"topic": descissionchain, "input": lambda x: x["input"], "provider":lambda x: x["provider"], "blacklist":lambda x: x["blacklist"]} | branch
+    full_chain = {"topic": descissionchain, "input": lambda x: x["input"], "provider":lambda x: x["provider"], "blacklist":lambda x: x["blacklist"], "history":loaded_memory }| branch
 
     return full_chain
 

@@ -2,7 +2,7 @@ import streamlit as st
 from llm_helpers.moviebot import get_chain
 import utils.utils as utils
 import utils.duckdb as duckdb
-
+from langchain.callbacks.tracers import ConsoleCallbackHandler
 
  
 
@@ -16,7 +16,7 @@ STREAMING_PROVIDER = ["Disney Plus","Amazon Prime Video","Apple TV","MagentaTV",
 
 # db
 duckdb.creattable()
-
+modelchain = get_chain()
 ### content and porcessing
 
 st.set_page_config(page_title="Moviebot", page_icon=":robot:")
@@ -65,11 +65,11 @@ if prompt := st.chat_input("Was möchtest du sehen?"):
         if 'titlehistory' not in st.session_state:
             print(f"initialize titelhistory for session")
             st.session_state.titlehistory = ""    
-        titlehistory = st.session_state.titlehistory        
+        titlehistory = st.session_state.titlehistory                
         print(f"titlehistory: ",titlehistory)
         
-        modelchain = get_chain()
-        response = modelchain.invoke({"input":prompt, "provider": providerselection, "blacklist": titlehistory})
+        
+        response = modelchain.invoke({"input":prompt, "provider": providerselection, "blacklist": titlehistory}, config={'callbacks': [ConsoleCallbackHandler()]})
         newtitles = utils.getTitlesFromOutput(response)
         st.session_state.titlehistory = st.session_state.titlehistory + newtitles
         duckdb.insert_conversation(prompt, response)
