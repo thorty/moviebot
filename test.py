@@ -1,6 +1,7 @@
 import tmdb.helper as helper
 import utils.utils as utils
 import utils.duckdb as duckdb
+import utils.supabase as superdb
 
 def main():    
     testtitlelist =  "Transformers, RoboCop, Robot, Blade Runner"
@@ -9,10 +10,10 @@ def main():
         
     #resp = duckdb.creattable()
     #resp= duckdb.insert_conversation("user1","bot1")
-    resp = helper.get_detail_moviedata("Planet der Affen - Prevolution")
-
+    #resp = helper.get_detail_moviedata("Planet der Affen - Prevolution")
+    superdb.insert_conversation("test1", "test2")
     #resp=duckdb.fetchdata()
-    print(resp)
+    #print(resp)
 if __name__ == "__main__":
     main()
 

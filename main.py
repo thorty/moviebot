@@ -1,8 +1,9 @@
 import streamlit as st
 from llm_helpers.moviebot import get_chain
 import utils.utils as utils
-import utils.duckdb as duckdb
 from langchain.callbacks.tracers import ConsoleCallbackHandler
+from st_supabase_connection import SupabaseConnection
+import utils.supabase as superdb
 
  
 
@@ -20,7 +21,7 @@ def reset():
 STREAMING_PROVIDER = ["Disney Plus","Amazon Prime Video","Apple TV","MagentaTV", "Netflix"] 
 
 # db
-duckdb.creattable()
+#duckdb.creattable()
 modelchain = get_chain()
 ### content and porcessing
 
@@ -86,7 +87,7 @@ if prompt := st.chat_input("Was möchtest du sehen?"):
         chathistory = prompt
         st.session_state.chathistory = st.session_state.chathistory + chathistory
 
-        duckdb.insert_conversation(prompt, response)
+        superdb.insert_conversation(prompt, response)
     #response = f"Echo: {prompt}"
     # Display assistant response in chat message container
     with st.chat_message("assistant"):
