@@ -4,4 +4,4 @@ openai
 #streamlit>=1.28
 langdetect
 #st-supabase-connection
-st-supabase-connection=1.2.1
+st-supabase-connection
