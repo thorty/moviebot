@@ -1,7 +1,6 @@
 requests
-langchain>=0.0.342
-openai>=1.3.6
+langchain
+openai
 streamlit>=1.28
-#langdetect
-#st-supabase-connection
-st-supabase-connection>=1.2.1
+langdetect
+st-supabase-connection
