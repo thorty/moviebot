@@ -3,4 +3,4 @@ langchain
 openai
 streamlit>=1.28
 langdetect
-st-supabase-connection
+#st-supabase-connection
