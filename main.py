@@ -80,7 +80,8 @@ if prompt := st.chat_input("Was möchtest du sehen?"):
         chathistory = st.session_state.chathistory                
         print(f"chathistory: ",chathistory)
         
-        response = modelchain.invoke({"input":prompt, "provider": providerselection, "blacklist": titlehistory, "history": chathistory}, config={'callbacks': [ConsoleCallbackHandler()]})
+        #response = modelchain.invoke({"input":prompt, "provider": providerselection, "blacklist": titlehistory, "history": chathistory}, config={'callbacks': [ConsoleCallbackHandler()]})
+        response = modelchain.invoke({"input":prompt, "provider": providerselection, "blacklist": titlehistory, "history": chathistory})
         newtitles = utils.getTitlesFromOutput(response)
         st.session_state.titlehistory = st.session_state.titlehistory + newtitles
         
