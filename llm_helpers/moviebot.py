@@ -12,7 +12,7 @@ from langchain.callbacks.manager import CallbackManager
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain.chains import create_extraction_chain
 
-from llm_helpers.openai_prompts import (
+from llm_helpers.llama2_prompts import (
     descisionprompt,
     recommedation_titels_prompt,
     general_prompt,
@@ -72,10 +72,8 @@ def get_chain():
             "context": {
                 "titles": recommedation_titels_prompt
                 # | llm_gpt4_temp
-                | llm
-                | StrOutputParser()
-                | {"input": RunnablePassthrough()}
-                | openai_functioncall_to_get_the_titles,
+                | llm | StrOutputParser() | {"input": RunnablePassthrough()},
+                # | openai_functioncall_to_get_the_titles,
                 "config": RunnablePassthrough(),
             }
             | RunnableLambda(get_recro_movies),
@@ -119,38 +117,38 @@ def get_chain():
     return full_chain
 
 
-def create_functioncall_chain_for_titles():
-    template = """
-    You have to extract the movie titles from given input and return them as a Python List of strings
+# def create_functioncall_chain_for_titles():
+#     template = """
+#     You have to extract the movie titles from given input and return them as a Python List of strings
 
-    input: {input}
-    output:
-    """
+#     input: {input}
+#     output:
+#     """
 
-    # prompt_template = PromptTemplate(input_variables=["input"], template=template)
-    prompt_template = PromptTemplate(
-        input_variables=["input"],
-        template=template,
-    )
+#     # prompt_template = PromptTemplate(input_variables=["input"], template=template)
+#     prompt_template = PromptTemplate(
+#         input_variables=["input"],
+#         template=template,
+#     )
 
-    # Schema
-    # schema = {
-    #     "properties": {
-    #         "movie_title_{i}": {"type": "string"},
-    #     },
-    #     "required": ["movie_title"],
-    # }
-    schema = {
-        "properties": {"movie_titles": {"type": "array", "items": {"type": "string"}}}
-    }
+#     # Schema
+#     # schema = {
+#     #     "properties": {
+#     #         "movie_title_{i}": {"type": "string"},
+#     #     },
+#     #     "required": ["movie_title"],
+#     # }
+#     schema = {
+#         "properties": {"movie_titles": {"type": "array", "items": {"type": "string"}}}
+#     }
 
-    # create chain
-    llm = ChatOllama(
-        model="llama2",
-        # callback_manager=CallbackManager([StreamingStdOutCallbackHandler()]),
-    )
-    chain = create_extraction_chain(
-        schema=schema, llm=llm, verbose=True, prompt=prompt_template
-    )
-    # chain = create_extraction_chain(schema=schema, llm=llm, verbose=True )
-    return chain
+#     # create chain
+#     llm = ChatOllama(
+#         model="llama2",
+#         # callback_manager=CallbackManager([StreamingStdOutCallbackHandler()]),
+#     )
+#     chain = create_extraction_chain(
+#         schema=schema, llm=llm, verbose=True, prompt=prompt_template
+#     )
+#     # chain = create_extraction_chain(schema=schema, llm=llm, verbose=True )
+#     return chain

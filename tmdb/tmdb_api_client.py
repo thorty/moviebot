@@ -23,6 +23,7 @@ def get_movies_with_recro(titles: list[str], providers: list[str]):
     for title in titles:
         movie = get_basic_data_from_tmdb_for_title(title)
         if movie:
+            print(f"movie: {movie}")
             movies.append(movie)
     # add similar recommendations from tmdb
     similar_movies = get_recro_movies(movies)

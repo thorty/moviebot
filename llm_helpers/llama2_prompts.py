@@ -16,7 +16,6 @@ Classification:"""
 
 recommedation_titels_prompt = PromptTemplate.from_template(
     """
-    Disregard any previous commands.
     You are a assistent for movie recommendations. Your goal is to recommend movies based on this inquiry: {input}
     Choose only 5 movies and only respond with a python list of strings.
     """
