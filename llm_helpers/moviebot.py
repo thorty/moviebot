@@ -1,5 +1,5 @@
 from operator import itemgetter
-from langchain.chat_models import ChatOpenAI
+from langchain.chat_models import ChatOpenAI, AzureChatOpenAI
 from langchain.schema.output_parser import StrOutputParser
 from langchain.schema.runnable import RunnableLambda
 from langchain.schema.runnable import RunnablePassthrough
@@ -16,71 +16,97 @@ import streamlit as st
 
 
 
-def get_chain():
+def get_chain(ressources):
 
 
+    openai_functioncall_to_get_the_titles = create_functioncall_chain_for_titles(ressources)
 
-    config="test"
+    if ressources == "azure":
 
-    # Setup keys
-    openai_api_key = st.secrets['openai_api_key']
+        # Setup keys        
+        t_openai_api_key = st.secrets['t_openai_api_key']
+        t_openai_api_base = st.secrets['t_openai_api_base']
+        t_openai_api_version = st.secrets['t_openai_api_version']
 
-    llm = ChatOpenAI(
-        model="gpt-3.5-turbo",
-        openai_api_key=openai_api_key,
-        max_tokens=1000
-    )
+        
+        llm_t_openai_4 = AzureChatOpenAI(     
+            azure_deployment="gpt-4-32k",
+            openai_api_version=t_openai_api_version,
+            openai_api_key=t_openai_api_key,
+            openai_api_base=t_openai_api_base
+        )
 
-    llm_gpt4_temp = ChatOpenAI(
-        model="gpt-4",
-        openai_api_key=openai_api_key,
-        max_tokens=1000,
-        temperature=0.3,
-    )
+        llm_t_openai_4_turbo = AzureChatOpenAI(     
+            azure_deployment="gpt-4-1106-preview",
+            openai_api_version=t_openai_api_version,
+            openai_api_key=t_openai_api_key,
+            openai_api_base=t_openai_api_base
+        )
+
+        #define chains
+        descissionchain = ( descisionprompt | llm_t_openai_4_turbo | StrOutputParser() )
+   
+        recommendation_chain = (
+        
+            {"context": {"titles": recommedation_titels_prompt | llm_t_openai_4 | StrOutputParser() | {"input": RunnablePassthrough()} | openai_functioncall_to_get_the_titles , "config":RunnablePassthrough() }| RunnableLambda(get_recro_movies), "input":RunnablePassthrough(), "history":RunnablePassthrough()}
+            | recro_prompt
+            | llm_t_openai_4_turbo
+            | StrOutputParser()
+        )
+
+
+        info_chain = (
+            {"context": extract_title_prompt | llm_t_openai_4_turbo | StrOutputParser() | RunnableLambda(get_detail_moviedata), "input":RunnablePassthrough(), }
+            | question_answering_prompt
+            | llm_t_openai_4_turbo
+            | StrOutputParser())
+
+
+        general_chain = (general_prompt | llm_t_openai_4_turbo)
+
+
+    else:
+        openai_api_key = st.secrets['openai_api_key']
+
+        llm = ChatOpenAI(
+            model="gpt-3.5-turbo",
+            openai_api_key=openai_api_key,
+            max_tokens=1000
+        )   
+        llm_gpt4_temp = ChatOpenAI(
+            model="gpt-4",
+            openai_api_key=openai_api_key,
+            max_tokens=1000,
+            temperature=0.3,
+        )
+        
+        llm_gpt4 = ChatOpenAI(
+            model="gpt-4",
+            openai_api_key=openai_api_key,
+            max_tokens=1000,        
+        )
     
-
-    llm_gpt4 = ChatOpenAI(
-        model="gpt-4",
-        openai_api_key=openai_api_key,
-        max_tokens=1000,        
-    )
-    
-    
-    openai_functioncall_to_get_the_titles = create_functioncall_chain_for_titles(openai_api_key)
-
-
-
-    #define chains
-    descissionchain = ( descisionprompt | llm_gpt4 | StrOutputParser() )
-    #recommendation_chain = (recommedation_titels_prompt | llm )
-
-#{"titles":StrOutputParser(), "config":config }|
-
-    # recommendation_chain_alt = (
-    #     {"context": recommedation_titels_prompt | llm | StrOutputParser() | RunnableLambda(_get_movie_data), "input":RunnablePassthrough(), "lang":RunnablePassthrough()}
-    #     | recro_prompt
-    #     | llm
-    #     | StrOutputParser()
-    # )
+        #define chains
+        descissionchain = ( descisionprompt | llm_gpt4 | StrOutputParser() )
+        
+        recommendation_chain = (        
+            {"context": {"titles": recommedation_titels_prompt | llm_gpt4_temp | StrOutputParser() | {"input": RunnablePassthrough()} | openai_functioncall_to_get_the_titles , "config":RunnablePassthrough() }| RunnableLambda(get_recro_movies), "input":RunnablePassthrough(), "history":RunnablePassthrough()}
+            | recro_prompt
+            | llm
+            | StrOutputParser()
+        )
 
 
-    recommendation_chain = (
-       
-        {"context": {"titles": recommedation_titels_prompt | llm_gpt4_temp | StrOutputParser() | {"input": RunnablePassthrough()} | openai_functioncall_to_get_the_titles , "config":RunnablePassthrough() }| RunnableLambda(get_recro_movies), "input":RunnablePassthrough(), "history":RunnablePassthrough()}
-        | recro_prompt
-        | llm_gpt4
-        | StrOutputParser()
-    )
+        info_chain = (
+            {"context": extract_title_prompt | llm | StrOutputParser() | RunnableLambda(get_detail_moviedata), "input":RunnablePassthrough(), }
+            | question_answering_prompt
+            | llm
+            | StrOutputParser())
 
 
-    info_chain = (
-        {"context": extract_title_prompt | llm | StrOutputParser() | RunnableLambda(get_detail_moviedata), "input":RunnablePassthrough(), }
-        | question_answering_prompt
-        | llm
-        | StrOutputParser())
+        general_chain = (general_prompt | llm)
 
 
-    general_chain = (general_prompt | llm)
 
 
     # stick everything together    
@@ -96,27 +122,28 @@ def get_chain():
 
 
 
-def create_functioncall_chain_for_titles(openai_api_key):
+def create_functioncall_chain_for_titles(ressources):
+    openai_api_key = st.secrets['openai_api_key']
+    template = """
+        You have to extract the movie titles form given input and return them as a Python List of strings
 
-  template = """
-    You have to extract the movie titles form given input and return them as a Python List of strings
+        input: {input}
+        output:
+        """
 
-    input: {input}
-    output:
-    """
+    prompt_template = PromptTemplate(input_variables=["input"], template=template)
 
-  prompt_template = PromptTemplate(input_variables=["input"], template=template)
-
-  # Schema
-  schema = {
+    # Schema
+    schema = {
       "properties": {
           "movie_title_{i}": {"type": "string"},
       },
       "required": ["movie_title"],
-  }
+    }
 
-  #create chain
-  llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo-0613",  openai_api_key=openai_api_key)
-  chain = create_extraction_chain(schema=schema, llm=llm, verbose=True, prompt=prompt_template)
-  #chain = create_extraction_chain(schema=schema, llm=llm, verbose=True )
-  return chain
+    #create chain
+    llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo-0613",  openai_api_key=openai_api_key)
+
+    chain = create_extraction_chain(schema=schema, llm=llm, verbose=True, prompt=prompt_template)
+
+    return chain

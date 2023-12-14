@@ -11,6 +11,7 @@ import yaml
 from yaml import SafeLoader
 
 
+
 def reset():
     st.session_state.messages=[]
     st.session_state.chathistory = ""
@@ -19,10 +20,11 @@ def reset():
 
 ### definitions
 STREAMING_PROVIDER = ["Disney Plus","Amazon Prime Video","Apple TV","MagentaTV", "Netflix"] 
+LLMRESOURCE ="azure"
 
 # db
 #duckdb.creattable()
-modelchain = get_chain()
+modelchain = get_chain(LLMRESOURCE)
 ### content and porcessing
 
 st.set_page_config(page_title="Moviebot", page_icon=":robot:")
