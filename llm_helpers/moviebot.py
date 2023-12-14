@@ -62,7 +62,7 @@ def get_chain(ressources):
             | StrOutputParser())
 
 
-        general_chain = (general_prompt | llm_t_openai_4_turbo)
+        general_chain = (general_prompt | llm_t_openai_4_turbo | StrOutputParser())
 
 
     else:
@@ -104,7 +104,7 @@ def get_chain(ressources):
             | StrOutputParser())
 
 
-        general_chain = (general_prompt | llm)
+        general_chain = (general_prompt | llm |StrOutputParser())
 
 
 
@@ -113,6 +113,7 @@ def get_chain(ressources):
     branch = RunnableBranch(
         (lambda x: "recommendation" in x["topic"].lower(), recommendation_chain),
         (lambda x: "question" in x["topic"].lower(), info_chain),
+        (lambda x: "else" in x["topic"].lower(), general_chain),
         general_chain,
     )
     full_chain = {"topic": descissionchain, "input": lambda x: x["input"], "provider":lambda x: x["provider"], "blacklist":lambda x: x["blacklist"], "history":lambda x: x["history"] }| branch
