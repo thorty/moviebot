@@ -276,6 +276,7 @@ def filter_movies(movies: dict, providers: list[str], blacklist):
       movie["rentproviders"]=rentproviders
       movie["flatproviders"]=flatproviders
   
+  filtered_list = [m for m in filtered_list if len(m["flatproviders"])>0 or len(m["rentproviders"])>0]
   filtered_list = [m for m in filtered_list if m["title"] not in blacklist]
 
   return filtered_list

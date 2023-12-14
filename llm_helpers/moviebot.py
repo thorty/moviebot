@@ -40,7 +40,8 @@ def get_chain(ressources):
             azure_deployment="gpt-4-1106-preview",
             openai_api_version=t_openai_api_version,
             openai_api_key=t_openai_api_key,
-            openai_api_base=t_openai_api_base
+            openai_api_base=t_openai_api_base,
+            temperature=0,
         )
 
         #define chains
@@ -71,19 +72,17 @@ def get_chain(ressources):
         llm = ChatOpenAI(
             model="gpt-3.5-turbo",
             openai_api_key=openai_api_key,
-            max_tokens=1000
+            #max_tokens=1000
         )   
         llm_gpt4_temp = ChatOpenAI(
             model="gpt-4",
-            openai_api_key=openai_api_key,
-            max_tokens=1000,
+            openai_api_key=openai_api_key,            
             temperature=0.3,
         )
         
         llm_gpt4 = ChatOpenAI(
             model="gpt-4",
-            openai_api_key=openai_api_key,
-            max_tokens=1000,        
+            openai_api_key=openai_api_key,                 
         )
     
         #define chains

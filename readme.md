@@ -32,6 +32,7 @@ TMDB https://www.themoviedb.org/?language=de
 - [ ] test with other cheaper llms
 - [X] filter for providers
 - [ ] filter for other preferences like rent or free streaming
+- [ ] search by persons / wich for free movies only
 - [ ] use block/watch list
 - [ ] Use mood as input and find the movie. 
 - [ ] inputfield for api key
