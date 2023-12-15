@@ -20,7 +20,7 @@ def reset():
 
 ### definitions
 STREAMING_PROVIDER = ["Disney Plus","Amazon Prime Video","Apple TV","MagentaTV", "Netflix"] 
-LLMRESOURCE ="azure"
+LLMRESOURCE ="openai"
 
 # db
 #duckdb.creattable()
