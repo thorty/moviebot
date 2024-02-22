@@ -3,4 +3,5 @@ __pycache__
 .DS_Store
 .streamlit
 duck.db
+.env
 output.csdictdichjtv˛
